@@ -1,0 +1,27 @@
+.manager {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.upload {
+  align-self: flex-start;
+  padding: 8px 16px;
+  background: #4a4aee;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background 0.12s;
+}
+
+.upload:hover {
+  background: #3b3bcc;
+}

@@ -1,0 +1,80 @@
+.page {
+  padding: 32px;
+  flex: 1;
+  max-width: 640px;
+}
+
+.back {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #4a4aee;
+  font-size: 0.9rem;
+  padding: 0;
+  margin-bottom: 16px;
+}
+
+.title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 24px;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.form label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 0.85rem;
+  color: #374151;
+  font-weight: 500;
+}
+
+.form input {
+  padding: 8px 10px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 0.9rem;
+}
+
+.sectionLabel {
+  font-size: 0.85rem;
+  color: #374151;
+  font-weight: 500;
+}
+
+.error {
+  color: #dc2626;
+  font-size: 0.85rem;
+}
+
+.saveBtn {
+  align-self: flex-start;
+  padding: 10px 28px;
+  background: #4a4aee;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.saveBtn:hover:not(:disabled) {
+  background: #3b3bcc;
+}
+
+.saveBtn:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.loading {
+  padding: 40px;
+  color: #6b7280;
+}

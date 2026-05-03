@@ -1,0 +1,27 @@
+.tagFilter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.tag,
+.active {
+  padding: 6px 14px;
+  border-radius: 20px;
+  border: 1px solid #d1d5db;
+  background: #fff;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: all 0.12s;
+}
+
+.tag:hover {
+  background: #f3f4f6;
+}
+
+.active {
+  background: #4a4aee;
+  color: #fff;
+  border-color: #4a4aee;
+}
