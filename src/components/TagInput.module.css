@@ -1,8 +1,12 @@
 .container {
-  border: 1px solid #d1d5db;
-  border-radius: 6px;
+  border: 1px solid #ccc;
   padding: 6px 8px;
   background: #fff;
+  transition: border-color 0.15s;
+}
+
+.container:focus-within {
+  border-color: #000;
 }
 
 .tags {
@@ -16,27 +20,35 @@
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  background: #e0e7ff;
-  color: #3730a3;
-  padding: 2px 8px;
-  border-radius: 12px;
-  font-size: 0.82rem;
+  background: #1a1a1a;
+  color: #fff;
+  padding: 3px 10px;
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
 }
 
 .tag button {
   background: none;
   border: none;
   cursor: pointer;
-  color: #6366f1;
+  color: #aaa;
   font-size: 1rem;
   line-height: 1;
   padding: 0;
+  transition: color 0.15s;
+}
+
+.tag button:hover {
+  color: #fff;
 }
 
 .input {
   border: none;
   outline: none;
   font-size: 0.9rem;
+  font-family: inherit;
   flex: 1;
   min-width: 120px;
+  background: transparent;
 }

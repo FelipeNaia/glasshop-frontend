@@ -2,26 +2,31 @@
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
-  margin-bottom: 20px;
+  align-items: center;
 }
 
 .tag,
 .active {
-  padding: 6px 14px;
-  border-radius: 20px;
-  border: 1px solid #d1d5db;
-  background: #fff;
+  padding: 7px 20px;
+  border-radius: 0;
+  border: 1px solid #ccc;
+  background: transparent;
   cursor: pointer;
-  font-size: 0.85rem;
-  transition: all 0.12s;
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  transition: all 0.15s;
+  color: #666;
 }
 
 .tag:hover {
-  background: #f3f4f6;
+  border-color: #000;
+  color: #000;
 }
 
 .active {
-  background: #4a4aee;
+  background: #000;
   color: #fff;
-  border-color: #4a4aee;
+  border-color: #000;
 }

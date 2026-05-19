@@ -1,16 +1,21 @@
 import { NavLink } from 'react-router-dom'
+import { SHOP_NAME } from '../config'
 import styles from './Sidebar.module.css'
 
 export default function Sidebar() {
   return (
-    <nav className={styles.sidebar}>
-      <div className={styles.logo}>Glasshop</div>
-      <NavLink to="/" end className={({ isActive }) => isActive ? styles.active : undefined}>
-        Shop
-      </NavLink>
-      <NavLink to="/admin" className={({ isActive }) => isActive ? styles.active : undefined}>
-        Admin
-      </NavLink>
-    </nav>
+    <header className={styles.navbar}>
+      <div className={styles.inner}>
+        <div className={styles.logo}>{SHOP_NAME.toUpperCase()}</div>
+        <nav className={styles.nav}>
+          <NavLink to="/" end className={({ isActive }) => isActive ? styles.active : styles.link}>
+            Shop
+          </NavLink>
+          <NavLink to="/admin" className={({ isActive }) => isActive ? styles.active : styles.link}>
+            Admin
+          </NavLink>
+        </nav>
+      </div>
+    </header>
   )
 }

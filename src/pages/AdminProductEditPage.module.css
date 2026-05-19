@@ -1,5 +1,5 @@
 .page {
-  padding: 32px;
+  padding: 40px;
   flex: 1;
   max-width: 640px;
 }
@@ -8,73 +8,103 @@
   background: none;
   border: none;
   cursor: pointer;
-  color: #4a4aee;
-  font-size: 0.9rem;
+  color: #555;
+  font-size: 0.72rem;
   padding: 0;
-  margin-bottom: 16px;
+  margin-bottom: 24px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-family: inherit;
+  transition: color 0.15s;
+}
+
+.back:hover {
+  color: #000;
 }
 
 .title {
-  font-size: 1.5rem;
+  font-size: 1.1rem;
   font-weight: 700;
-  margin-bottom: 24px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 32px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid #e0e0de;
 }
 
 .form {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 20px;
 }
 
 .form label {
   display: flex;
   flex-direction: column;
   gap: 6px;
-  font-size: 0.85rem;
-  color: #374151;
+  font-size: 0.72rem;
+  color: #555;
   font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
 }
 
 .form input {
-  padding: 8px 10px;
-  border: 1px solid #d1d5db;
-  border-radius: 6px;
+  padding: 10px 12px;
+  border: 1px solid #ccc;
+  border-radius: 0;
   font-size: 0.9rem;
+  font-family: inherit;
+  color: #1a1a1a;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.form input:focus {
+  border-color: #000;
 }
 
 .sectionLabel {
-  font-size: 0.85rem;
-  color: #374151;
+  font-size: 0.72rem;
+  color: #555;
   font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
 }
 
 .error {
-  color: #dc2626;
-  font-size: 0.85rem;
+  color: #c0392b;
+  font-size: 0.8rem;
 }
 
 .saveBtn {
   align-self: flex-start;
-  padding: 10px 28px;
-  background: #4a4aee;
+  padding: 12px 36px;
+  background: #000;
   color: #fff;
   border: none;
-  border-radius: 6px;
   cursor: pointer;
-  font-size: 0.95rem;
+  font-size: 0.68rem;
   font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-family: inherit;
+  transition: opacity 0.15s;
 }
 
 .saveBtn:hover:not(:disabled) {
-  background: #3b3bcc;
+  opacity: 0.75;
 }
 
 .saveBtn:disabled {
-  opacity: 0.6;
+  opacity: 0.4;
   cursor: default;
 }
 
 .loading {
-  padding: 40px;
-  color: #6b7280;
+  padding: 60px 40px;
+  color: #888;
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
 }

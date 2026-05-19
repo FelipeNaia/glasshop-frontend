@@ -4,6 +4,7 @@ import ProductCard from '../components/ProductCard'
 import TagFilter from '../components/TagFilter'
 import Pagination from '../components/Pagination'
 import styles from './ShopPage.module.css'
+import { SHOP_TAGLINE, SHOP_SUBTITLE } from '../config'
 
 const PAGE_SIZE = 12
 const KNOWN_TAGS = ['male', 'female']
@@ -36,16 +37,32 @@ export default function ShopPage() {
 
   return (
     <div className={styles.page}>
-      <h1 className={styles.title}>Shop</h1>
-      <TagFilter tags={KNOWN_TAGS} selected={selectedTags} onToggle={toggleTag} />
-      {loading ? (
-        <p className={styles.loading}>Loading…</p>
-      ) : (
-        <div className={styles.grid}>
-          {products.map(p => <ProductCard key={p.id} product={p} />)}
+      <div className={styles.hero}>
+        <p className={styles.heroEyebrow}>Nova coleção'</p>
+        <h1 className={styles.heroTitle}>{SHOP_TAGLINE}</h1>
+        <p className={styles.heroSub}>{SHOP_SUBTITLE}</p>
+      </div>
+
+      <div className={styles.catalog}>
+        <div className={styles.filterBar}>
+          <TagFilter tags={KNOWN_TAGS} selected={selectedTags} onToggle={toggleTag} />
         </div>
-      )}
-      <Pagination page={page} totalPages={totalPages} onPrev={() => setPage(p => p - 1)} onNext={() => setPage(p => p + 1)} />
+
+        {loading ? (
+          <p className={styles.loading}>Loading…</p>
+        ) : (
+          <div className={styles.grid}>
+            {products.map(p => <ProductCard key={p.id} product={p} />)}
+          </div>
+        )}
+
+        <Pagination
+          page={page}
+          totalPages={totalPages}
+          onPrev={() => setPage(p => p - 1)}
+          onNext={() => setPage(p => p + 1)}
+        />
+      </div>
     </div>
   )
 }

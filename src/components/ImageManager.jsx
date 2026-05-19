@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react'
-import { uploadImage, reorderImages } from '../api/images'
+import { uploadImage, reorderImages, deleteImage } from '../api/images'
 import ImagePreview from './ImagePreview'
 import styles from './ImageManager.module.css'
 
@@ -33,7 +33,8 @@ export default function ImageManager({ productId, images, onChange }) {
     await reorderImages(productId, images.map(i => i.id))
   }
 
-  function handleDelete(imageId) {
+  async function handleDelete(imageId) {
+    await deleteImage(productId, imageId)
     onChange(images.filter(i => i.id !== imageId))
   }
 
