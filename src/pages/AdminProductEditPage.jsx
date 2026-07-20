@@ -13,6 +13,7 @@ export default function AdminProductEditPage() {
   const [images, setImages] = useState([])
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
+  const [saved, setSaved] = useState(false)
   const [error, setError] = useState('')
 
   useEffect(() => {
@@ -35,7 +36,8 @@ export default function AdminProductEditPage() {
         stockQuantity: parseInt(form.stockQuantity, 10),
         tags,
       })
-      navigate('/admin')
+      setSaved(true)
+      setTimeout(() => setSaved(false), 2000)
     } catch (err) {
       setError(err.response?.data?.message ?? 'Failed to save')
     } finally {
@@ -69,6 +71,7 @@ export default function AdminProductEditPage() {
         <ImageManager productId={id} images={images} onChange={setImages} />
 
         {error && <p className={styles.error}>{error}</p>}
+        {saved && <p className={styles.success}>Saved</p>}
         <button type="submit" className={styles.saveBtn} disabled={saving}>
           {saving ? 'Saving…' : 'Save'}
         </button>

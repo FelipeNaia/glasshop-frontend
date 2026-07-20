@@ -10,21 +10,30 @@
   gap: 10px;
 }
 
-.upload {
-  align-self: flex-start;
-  padding: 9px 20px;
-  background: #000;
-  color: #fff;
-  border: none;
+.dropZone {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 18px 20px;
+  border: 1.5px dashed #bbb;
+  color: #555;
   cursor: pointer;
   font-size: 0.68rem;
   font-weight: 600;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   font-family: inherit;
-  transition: opacity 0.15s;
+  transition: border-color 0.15s, background 0.15s, color 0.15s;
+  user-select: none;
 }
 
-.upload:hover {
-  opacity: 0.75;
+.dropZone:hover {
+  border-color: #000;
+  color: #000;
+}
+
+.dropActive {
+  border-color: #000;
+  background: #f5f5f5;
+  color: #000;
 }

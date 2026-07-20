@@ -5,21 +5,48 @@ import styles from './ImageManager.module.css'
 
 export default function ImageManager({ productId, images, onChange }) {
   const [draggingIndex, setDraggingIndex] = useState(null)
+  const [dropActive, setDropActive] = useState(false)
   const fileRef = useRef()
 
-  async function handleUpload(e) {
-    const file = e.target.files[0]
-    if (!file) return
+  async function uploadFile(file) {
+    if (!file || !file.type.startsWith('image/')) return
     const updated = await uploadImage(productId, file)
     onChange(updated.images)
+  }
+
+  async function handleUpload(e) {
+    await uploadFile(e.target.files[0])
     e.target.value = ''
+  }
+
+  function handleDragEnter(e) {
+    if (!e.dataTransfer.types.includes('Files')) return
+    e.preventDefault()
+    setDropActive(true)
+  }
+
+  function handleDragOver(e) {
+    if (!e.dataTransfer.types.includes('Files')) return
+    e.preventDefault()
+  }
+
+  function handleDragLeave(e) {
+    if (e.currentTarget.contains(e.relatedTarget)) return
+    setDropActive(false)
+  }
+
+  async function handleDrop(e) {
+    e.preventDefault()
+    setDropActive(false)
+    const file = e.dataTransfer.files[0]
+    await uploadFile(file)
   }
 
   function handleDragStart(index) {
     setDraggingIndex(index)
   }
 
-  function handleDragOver(index) {
+  function handleTilesDragOver(index) {
     if (draggingIndex === null || draggingIndex === index) return
     const reordered = [...images]
     const [moved] = reordered.splice(draggingIndex, 1)
@@ -28,7 +55,7 @@ export default function ImageManager({ productId, images, onChange }) {
     onChange(reordered)
   }
 
-  async function handleDrop() {
+  async function handleTilesDrop() {
     setDraggingIndex(null)
     await reorderImages(productId, images.map(i => i.id))
   }
@@ -47,15 +74,22 @@ export default function ImageManager({ productId, images, onChange }) {
             image={img}
             index={idx}
             onDragStart={handleDragStart}
-            onDragOver={handleDragOver}
-            onDrop={handleDrop}
+            onDragOver={handleTilesDragOver}
+            onDrop={handleTilesDrop}
             onDelete={handleDelete}
           />
         ))}
       </div>
-      <button type="button" className={styles.upload} onClick={() => fileRef.current.click()}>
-        + Upload Image
-      </button>
+      <div
+        className={`${styles.dropZone} ${dropActive ? styles.dropActive : ''}`}
+        onDragEnter={handleDragEnter}
+        onDragOver={handleDragOver}
+        onDragLeave={handleDragLeave}
+        onDrop={handleDrop}
+        onClick={() => fileRef.current.click()}
+      >
+        {dropActive ? 'Drop to upload' : '+ Upload Image'}
+      </div>
       <input ref={fileRef} type="file" accept="image/*" style={{ display: 'none' }} onChange={handleUpload} />
     </div>
   )

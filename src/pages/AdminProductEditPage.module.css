@@ -77,6 +77,11 @@
   font-size: 0.8rem;
 }
 
+.success {
+  color: #27ae60;
+  font-size: 0.8rem;
+}
+
 .saveBtn {
   align-self: flex-start;
   padding: 12px 36px;
