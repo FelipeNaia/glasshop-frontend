@@ -153,3 +153,35 @@ src/
 5. **Admin list page** — product table, visibility toggle
 6. **Admin edit page** — product form, tag input
 7. **Image manager** — upload, preview, drag-and-drop reorder
+
+---
+
+# Plan: Auth, Cart & Checkout UI
+
+Full detail, routes, components, API layers, and per-item progress checkboxes live in
+`ai-development/` — that's the source of truth for what's implemented vs. outstanding.
+This section is just a map of the three tickets and how they relate.
+
+## Goals
+
+- Login/register UI, token handling, and route protection for `BUYER` vs `ADMIN` — the
+  `/admin` routes are currently open to anyone and need to be gated.
+- Cart UI wired to the existing (currently disabled, no-op) "Add to Cart" button on
+  `ProductPage`.
+- Checkout UI that hands off to Abacate Pay's PIX flow and polls for async payment
+  confirmation, plus an order history/detail view.
+
+## Tickets
+
+| Ticket | File | Depends on |
+|--------|------|------------|
+| Authentication & Authorization | [`ai-development/authentication.md`](ai-development/authentication.md) | — |
+| Shopping Cart | [`ai-development/shopping-cart.md`](ai-development/shopping-cart.md) | Authentication |
+| Checkout & Payment (Abacate Pay) | [`ai-development/payment.md`](ai-development/payment.md) | Authentication, Shopping Cart |
+
+## Notes
+- These tickets are the frontend counterpart to `../backend/ai-development/` — each
+  frontend ticket assumes the matching backend endpoints exist; check the backend's
+  checkboxes if something doesn't behave as documented.
+- Explicitly deferred for v1 (see individual tickets for details): forgot/reset password
+  UI, guest carts, cart merge-on-login, card payment UI, refunds, order cancellation.
