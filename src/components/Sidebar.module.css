@@ -59,3 +59,26 @@ button.link {
   cursor: pointer;
   font-family: inherit;
 }
+
+.cartLink,
+.cartLinkActive {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  color: #888;
+  transition: color 0.15s;
+}
+
+.cartLinkActive {
+  color: #fff;
+}
+
+.cartLink:hover {
+  color: #fff;
+}
+
+.cartIcon {
+  width: 20px;
+  height: 20px;
+  display: block;
+}

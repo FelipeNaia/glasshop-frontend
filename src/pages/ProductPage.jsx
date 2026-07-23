@@ -1,14 +1,20 @@
 import { useEffect, useState } from 'react'
-import { useParams, useNavigate } from 'react-router-dom'
+import { useParams, useNavigate, useLocation } from 'react-router-dom'
 import { getProduct } from '../api/products'
 import { getImageUrl } from '../api/images'
+import { useAuth } from '../context/AuthContext'
+import { useCart } from '../context/CartContext'
 import styles from './ProductPage.module.css'
 
 export default function ProductPage() {
   const { id } = useParams()
   const navigate = useNavigate()
+  const location = useLocation()
+  const { user } = useAuth()
+  const { addToCart } = useCart()
   const [product, setProduct] = useState(null)
   const [activeIdx, setActiveIdx] = useState(0)
+  const [addState, setAddState] = useState('idle') // idle | adding | added | error
 
   useEffect(() => {
     getProduct(id).then(p => {
@@ -24,6 +30,29 @@ export default function ProductPage() {
 
   const { name, price, stockQuantity, tags, images } = product
   const activeImage = images[activeIdx] ?? null
+
+  async function handleAddToCart() {
+    if (!user) {
+      navigate('/login', { state: { from: location } })
+      return
+    }
+    setAddState('adding')
+    try {
+      await addToCart(product.id, 1)
+      setAddState('added')
+      setTimeout(() => setAddState('idle'), 1500)
+    } catch {
+      setAddState('error')
+      setTimeout(() => setAddState('idle'), 1500)
+    }
+  }
+
+  const addToCartLabel =
+    stockQuantity === 0 ? 'Sold Out'
+    : addState === 'adding' ? 'Adding…'
+    : addState === 'added' ? 'Added ✓'
+    : addState === 'error' ? 'Try Again'
+    : 'Add to Cart'
 
   return (
     <div className={styles.page}>
@@ -74,8 +103,12 @@ export default function ProductPage() {
             </span>
           </div>
 
-          <button className={styles.addToCart} disabled={stockQuantity === 0}>
-            {stockQuantity > 0 ? 'Add to Cart' : 'Sold Out'}
+          <button
+            className={styles.addToCart}
+            disabled={stockQuantity === 0 || addState === 'adding'}
+            onClick={handleAddToCart}
+          >
+            {addToCartLabel}
           </button>
         </div>
       </div>

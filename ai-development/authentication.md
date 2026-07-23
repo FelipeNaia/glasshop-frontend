@@ -26,17 +26,25 @@ The backend returns both tokens directly in the response body (no cookies). Plan
 - `register(email, password)` → `POST /api/auth/register`
 - `login(email, password)` → `POST /api/auth/login`
 - `refresh(refreshToken)` → `POST /api/auth/refresh`
-- `logout()` → `POST /api/auth/logout`
+- `logout(refreshToken)` → `POST /api/auth/logout`
 
-## Axios wiring
-- Request interceptor: attach `Authorization: Bearer <accessToken>` from `AuthContext` to
-  every request.
-- Response interceptor: on `401`, attempt one `refresh()` call; if it succeeds, retry the
-  original request with the new access token; if it fails, clear auth state and redirect
-  to `/login`.
+## Axios wiring (`src/api/authToken.js`)
+- The access token lives in a plain module-level variable here (not React state) so the
+  axios interceptors can read/attach it synchronously outside the React tree; `AuthContext`
+  is still the single source of truth and pushes updates into this module on every
+  login/refresh/logout.
+- Request interceptor: attach `Authorization: Bearer <accessToken>` to every request.
+- Response interceptor: on `401` (excluding `/api/auth/**` itself), call the refresh
+  handler registered by `AuthContext`, dedupe concurrent 401s onto one in-flight refresh,
+  then retry the original request with the new token; if refresh fails, propagate the
+  error (auth state is cleared, and any `RequireAuth`/`RequireAdmin`-guarded route the
+  user is on redirects on its next render).
 
 ## `AuthContext` (`src/context/AuthContext.jsx`)
-- State: `user` (`{ id, email, role }` decoded from the access token, or fetched), `accessToken`, `isLoading` (true while the silent refresh-on-load runs).
+- State: `user` (`{ id, email, role }`, taken directly from the `userId`/`email`/`role`
+  fields the backend already returns on login/refresh — no JWT decoding needed on the
+  frontend), `isLoading` (true while the silent refresh-on-load runs). The access token
+  itself is not exposed as React state — see Axios wiring above.
 - Actions: `login(email, password)`, `register(email, password)`, `logout()`.
 - On mount: if a refresh token exists in `localStorage`, call `refresh()` silently to
   obtain a fresh access token before rendering protected content.
@@ -48,11 +56,14 @@ The backend returns both tokens directly in the response body (no cookies). Plan
 | `/register` | `RegisterPage` | Email + password form, calls `register`, then logs in automatically. |
 
 ## Route protection
-- `RequireAuth` wrapper component — redirects to `/login` if `accessToken` is null (used
-  to guard `/cart`, `/checkout`, `/orders`, `/orders/:id`).
-- `RequireAdmin` wrapper component — redirects to `/` if `user.role !== 'ADMIN'` (used to
-  guard `/admin` and `/admin/products/:id`, replacing today's unprotected routes in
-  `App.jsx`).
+- `RequireAuth` wrapper component (`src/components/RequireAuth.jsx`) — a React Router v6
+  layout route (`<Outlet/>`-based) that redirects to `/login` if `user` is null. Built,
+  but not yet applied to any route — `/cart`, `/checkout`, `/orders`, `/orders/:id` don't
+  exist yet; wiring it up is part of the [shopping-cart](shopping-cart.md) /
+  [payment](payment.md) tickets.
+- `RequireAdmin` wrapper component (`src/components/RequireAdmin.jsx`) — same pattern,
+  redirects to `/` if `user.role !== 'ADMIN'`. Applied to `/admin` and
+  `/admin/products/:id` in `App.jsx`, replacing the previously unprotected routes.
 
 ## Sidebar changes (`src/components/Sidebar.jsx`)
 - Show "Admin" nav link only when `user?.role === 'ADMIN'`.
@@ -62,14 +73,15 @@ The backend returns both tokens directly in the response body (no cookies). Plan
 
 ## Checklist
 
-- [ ] `src/api/auth.js` — register/login/refresh/logout wrappers
-- [ ] Axios request interceptor (attach access token)
-- [ ] Axios response interceptor (401 → refresh → retry, else redirect to `/login`)
-- [ ] `AuthContext` + provider, wrapping `App.jsx`
-- [ ] Silent refresh-on-load using the stored refresh token
-- [ ] `LoginPage` + route
-- [ ] `RegisterPage` + route
-- [ ] `RequireAuth` wrapper, applied to `/cart`, `/checkout`, `/orders`, `/orders/:id`
-- [ ] `RequireAdmin` wrapper, applied to `/admin`, `/admin/products/:id`
-- [ ] Sidebar: conditional Admin link, login/logout state
-- [ ] Logout clears `AuthContext` state + `localStorage` refresh token + redirects to `/`
+- [x] `src/api/auth.js` — register/login/refresh/logout wrappers
+- [x] Axios request interceptor (attach access token)
+- [x] Axios response interceptor (401 → refresh → retry, else propagate so route guards redirect)
+- [x] `AuthContext` + provider, wrapping `App.jsx`
+- [x] Silent refresh-on-load using the stored refresh token
+- [x] `LoginPage` + route
+- [x] `RegisterPage` + route
+- [x] `RequireAuth` wrapper component built (`src/components/RequireAuth.jsx`)
+- [ ] `RequireAuth` applied to `/cart`, `/checkout`, `/orders`, `/orders/:id` — blocked on those routes existing (see [shopping-cart](shopping-cart.md), [payment](payment.md))
+- [x] `RequireAdmin` wrapper, applied to `/admin`, `/admin/products/:id`
+- [x] Sidebar: conditional Admin link, login/logout state
+- [x] Logout clears `AuthContext`/axios state + `localStorage` refresh token + redirects to `/`
